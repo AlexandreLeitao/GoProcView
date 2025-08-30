@@ -18,36 +18,37 @@ func Execute() {
 	watch := flag.Bool("w", false, "Watch mode - refresh every 1 seconds")
 	flag.Parse()
 
-	switch *command {
-	case "procview":
-		if *watch {
-			for {
-				procData := fetch.FetchProcData(*pId)
-				if *mode == "graphic" {
-					render.GraphicRender(procData)
-				} else if *mode == "simple" {
-					render.SimpleRender(procData)
+	if *help == false {
+		switch *command {
+		case "procview":
+			if *watch {
+				for {
+					procData := fetch.FetchProcData(*pId)
+					if *mode == "graphic" {
+						render.GraphicRender(procData)
+					} else if *mode == "simple" {
+						render.SimpleRender(procData)
+					}
+					fmt.Println("--------------------------------------------------")
+					time.Sleep(1 * time.Second)
 				}
-				fmt.Println("--------------------------------------------------")
-				time.Sleep(1 * time.Second)
 			}
-		}
 
-		procData := fetch.FetchProcData(*pId)
-		if *mode == "graphic" {
-			render.GraphicRender(procData)
-		} else if *mode == "simple" {
-			render.SimpleRender(procData)
+			procData := fetch.FetchProcData(*pId)
+			if *mode == "graphic" {
+				render.GraphicRender(procData)
+			} else if *mode == "simple" {
+				render.SimpleRender(procData)
+			}
+		case "sysinfo":
+			hwData, _ := fetch.GetHardwareInfo()
+			render.RenderHardwareInfo(hwData)
+		case "help":
+			*help = true
+		default:
+			fmt.Printf("Unknown command: %s\n", *command)
 		}
-	case "sysinfo":
-		hwData, _ := fetch.GetHardwareInfo()
-		render.RenderHardwareInfo(hwData)
-	case "help":
-		*help = true
-	default:
-		fmt.Printf("Unknown command: %s\n", *command)
 	}
-
 	if *help {
 		fmt.Println("Usage of GoProcView:")
 		flag.PrintDefaults()
