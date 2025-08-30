@@ -85,7 +85,3 @@ Process ID: 142, Name: Firefox, Cpu: 0.00%
 
 - Go 1.18+
 - Linux (uses `/proc` filesystem)
-
-## License
-
-MIT
